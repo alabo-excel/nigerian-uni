@@ -2,13 +2,11 @@
   <v-container>
     <v-app-bar app color="#03081a" dark>
       <v-row class="mt-6">
-        <v-col class="ml-8">
+        <v-col cols="5" class="">
           <h2>9jaUni</h2>
         </v-col>
-        <v-spacer></v-spacer>
-        <v-col cols="3" class="d-flex">
-          <v-text-field v-model="name" label="Enter Name"></v-text-field>
-          <v-btn color="#fff" class="text--primary" @click="searchName">Search</v-btn>
+        <v-col cols="7" class="d-flex">
+          <v-text-field @blur="searchName" v-model="name" label="Enter Name"></v-text-field>
         </v-col>
       </v-row>
     </v-app-bar>
@@ -105,12 +103,12 @@ export default {
             if (number.name.includes(this.name)) {
               final.push(number);
               this.unis = final;
+              // this.snackbar = false;
             } else {
               // this.snackbar = true;
             }
           });
         });
-
     },
     next() {
       if (this.index < 5) {
