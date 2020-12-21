@@ -1,14 +1,18 @@
 <template>
   <v-container>
     <v-app-bar app color="#03081a" dark>
-      <v-row>
+      <v-row class="mt-6">
+        <v-col class="ml-8">
+          <h2>9jaUni</h2>
+        </v-col>
+        <v-spacer></v-spacer>
         <v-col cols="3" class="d-flex">
-          <v-text-field v-model="name" label="Enter Name" ></v-text-field>
-          <v-btn @click="searchName">Search</v-btn>
+          <v-text-field v-model="name" label="Enter Name"></v-text-field>
+          <v-btn color="#fff" class="text--primary" @click="searchName">Search</v-btn>
         </v-col>
       </v-row>
     </v-app-bar>
-
+    <p id="nav"></p>
     <v-row class="" justify="center">
       <v-col cols="11"> </v-col>
 
@@ -29,7 +33,7 @@
 
           <v-card-actions>
             <a :href="uni.web">
-              <v-btn>Visit</v-btn>
+              <v-btn id="btn" color="#03081a" class="text--primary">Visit</v-btn>
             </a>
           </v-card-actions>
         </v-card>
@@ -38,8 +42,16 @@
 
     <v-col col="12">
       <div class="text-center">
-        <v-btn @click="next"><v-icon>mdi-chevron-left</v-icon></v-btn>
-        <v-btn @click="prev"><v-icon>mdi-chevron-right</v-icon></v-btn>
+        <a href="#nav">
+          <v-btn color="#03081a" id="btn" @click="next"
+            ><v-icon>mdi-chevron-left</v-icon></v-btn
+          >
+        </a>
+        <a href="#nav">
+          <v-btn color="#03081a" id="btn" @click="prev"
+            ><v-icon>mdi-chevron-right</v-icon></v-btn
+          >
+        </a>
       </div>
     </v-col>
 
@@ -65,7 +77,7 @@ export default {
     name: null,
     snackbar: false,
     index: 0,
-    allData: []
+    allData: [],
   }),
 
   mounted() {
@@ -83,57 +95,67 @@ export default {
   },
   methods: {
     searchName() {
-      console.log(this.allData)
-      var outputs = this.allData;
-      var final = [];
-      outputs.forEach((number) => {
-        if (number.name.includes(this.name)) {
-          final.push(number);
-          this.unis = final;
-        } else {
-          // this.snackbar = true;
-        }
-      });
-    },
-    next (){
-      this.index = this.index +1;
       fetch("https://nigerian-universities.herokuapp.com/")
-      .then((response) => response.json())
-      .then((data) => {
-        this.unis = data;
-        const n = 26;
-        const result = new Array(Math.ceil(this.unis.length / n))
-          .fill()
-          .map(() => this.unis.splice(0, n));
-        this.unis = result[this.index];
-      });
+        .then((response) => response.json())
+        .then((data) => {
+          this.allData = data;
+          var outputs = this.allData;
+          var final = [];
+          outputs.forEach((number) => {
+            if (number.name.includes(this.name)) {
+              final.push(number);
+              this.unis = final;
+            } else {
+              // this.snackbar = true;
+            }
+          });
+        });
+
     },
-    prev(){
-      if(this.index > 0){
-        this.index = this.index-1;
+    next() {
+      if (this.index < 5) {
+        this.index = this.index + 1;
         fetch("https://nigerian-universities.herokuapp.com/")
-      .then((response) => response.json())
-      .then((data) => {
-        this.unis = data;
-        const n = 26;
-        const result = new Array(Math.ceil(this.unis.length / n))
-          .fill()
-          .map(() => this.unis.splice(0, n));
-        this.unis = result[this.index];
-      });
-      }else{
-        console.log("bad")
+          .then((response) => response.json())
+          .then((data) => {
+            this.unis = data;
+            const n = 26;
+            const result = new Array(Math.ceil(this.unis.length / n))
+              .fill()
+              .map(() => this.unis.splice(0, n));
+            this.unis = result[this.index];
+          });
+      } else {
+        console.log("bad");
+      }
+    },
+    prev() {
+      if (this.index > 0) {
+        this.index = this.index - 1;
+        fetch("https://nigerian-universities.herokuapp.com/")
+          .then((response) => response.json())
+          .then((data) => {
+            this.unis = data;
+            const n = 26;
+            const result = new Array(Math.ceil(this.unis.length / n))
+              .fill()
+              .map(() => this.unis.splice(0, n));
+            this.unis = result[this.index];
+          });
+      } else {
+        console.log("bad");
       }
     },
   },
-    computed:{
-    
-    }
+  computed: {},
 };
 </script>
 <style>
 a {
   text-decoration: none !important;
+}
+#btn {
+  color: white !important;
 }
 
 /* 
