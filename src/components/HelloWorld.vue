@@ -6,15 +6,27 @@
           <h2>9jaUni</h2>
         </v-col>
         <v-col cols="7" class="d-flex">
-          <v-text-field @blur="searchName" v-model="name" label="Enter Name"></v-text-field>
+          <v-text-field
+            @blur="searchName"
+            v-model="name"
+            label="Enter Name"
+          ></v-text-field>
         </v-col>
       </v-row>
     </v-app-bar>
     <p id="nav"></p>
     <v-row class="" justify="center">
-      <v-col cols="11"> </v-col>
+      <v-col cols="12" justify="center" align="center">
+        <v-progress-circular
+          :size="70"
+          :width="7"
+          color="#03081a"
+          indeterminate
+          id="spinner"
+        ></v-progress-circular>
+      </v-col>
 
-      <v-col cols="11" v-for="uni in unis" :key="uni.name">
+      <v-col lg="6" sm="11" v-for="uni in unis" :key="uni.name">
         <v-card id="card" class="mx-auto" max-width="800" outlined>
           <v-list-item three-line>
             <v-list-item-content>
@@ -39,14 +51,14 @@
     </v-row>
 
     <v-col col="12">
-      <div class="text-center">
+      <div id="pagination" class="text-center">
         <a href="#nav">
-          <v-btn color="#03081a" id="btn" @click="next"
+          <v-btn class="mr-5" color="#03081a" id="btn" @click="next"
             ><v-icon>mdi-chevron-left</v-icon></v-btn
           >
         </a>
         <a href="#nav">
-          <v-btn color="#03081a" id="btn" @click="prev"
+          <v-btn class="ml-5" color="#03081a" id="btn" @click="prev"
             ><v-icon>mdi-chevron-right</v-icon></v-btn
           >
         </a>
@@ -79,6 +91,8 @@ export default {
   }),
 
   mounted() {
+    document.getElementById("pagination").style.display = "none";
+    document.getElementById("spinner").style.display = "block";
     fetch("https://nigerian-universities.herokuapp.com/")
       .then((response) => response.json())
       .then((data) => {
@@ -89,10 +103,13 @@ export default {
           .fill()
           .map(() => this.unis.splice(0, n));
         this.unis = result[this.index];
+        document.getElementById("spinner").style.display = "none";
+        document.getElementById("pagination").style.display = "block";
       });
   },
   methods: {
     searchName() {
+      document.getElementById("spinner").style.display = "block";
       fetch("https://nigerian-universities.herokuapp.com/")
         .then((response) => response.json())
         .then((data) => {
@@ -108,9 +125,11 @@ export default {
               // this.snackbar = true;
             }
           });
+          document.getElementById("spinner").style.display = "none";
         });
     },
     next() {
+      document.getElementById("spinner").style.display = "block";
       if (this.index < 5) {
         this.index = this.index + 1;
         fetch("https://nigerian-universities.herokuapp.com/")
@@ -122,12 +141,14 @@ export default {
               .fill()
               .map(() => this.unis.splice(0, n));
             this.unis = result[this.index];
+            document.getElementById("spinner").style.display = "none";
           });
       } else {
         console.log("bad");
       }
     },
     prev() {
+      document.getElementById("spinner").style.display = "block";
       if (this.index > 0) {
         this.index = this.index - 1;
         fetch("https://nigerian-universities.herokuapp.com/")
@@ -139,6 +160,7 @@ export default {
               .fill()
               .map(() => this.unis.splice(0, n));
             this.unis = result[this.index];
+            document.getElementById("spinner").style.display = "none";
           });
       } else {
         console.log("bad");
